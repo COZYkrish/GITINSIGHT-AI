@@ -1,0 +1,61 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Build outputs ─────────────────────────────────────────────────────────────
+dist/
+build/
+.next/
+out/
+
+# ── Environment variables — NEVER COMMIT THESE ───────────────────────────────
+.env
+.env.local
+.env.production
+.env.staging
+*.env
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ── TypeScript ────────────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ── Vite ──────────────────────────────────────────────────────────────────────
+.vite/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Redis data ────────────────────────────────────────────────────────────────
+dump.rdb
+appendonly.aof
+
+# ── Scratch & Test Scripts ──────────────────────────────────────────────────
+test-*.ts
+test-*.js
+delete-*.ts
+delete-*.js
+list-*.js
+*.test-script.js
+

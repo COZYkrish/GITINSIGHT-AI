@@ -1,0 +1,83 @@
+# render.yaml — Render.com deployment configuration
+# Deploy both backend (Web Service) and a Redis instance
+
+services:
+  # ── Backend API ───────────────────────────────────────────────────────────────
+  - type: web
+    name: gitinsight-backend
+    runtime: node
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false   # Set manually in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GITHUB_CLIENT_ID
+        sync: false
+      - key: GITHUB_CLIENT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          name: gitinsight-redis
+          type: redis
+          property: connectionString
+      - key: FRONTEND_URL
+        value: https://gitinsight-frontend.onrender.com
+      - key: ENABLE_BACKGROUND_JOBS
+        value: "true"
+      - key: ENABLE_DEVELOPER_DNA
+        value: "true"
+      - key: ENABLE_RESUME_BUILDER
+        value: "true"
+      - key: ENABLE_PORTFOLIO_GENERATOR
+        value: "true"
+      - key: ENABLE_GITHUB_WRAPPED
+        value: "true"
+      - key: ENABLE_REPO_COMPARE
+        value: "true"
+      - key: ENABLE_PUBLIC_PROFILES
+        value: "true"
+      - key: ENABLE_SOCIAL_SHARING
+        value: "true"
+
+  # ── Frontend (Static Site) ────────────────────────────────────────────────────
+  - type: web
+    name: gitinsight-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://gitinsight-backend.onrender.com
+
+  # ── Redis ─────────────────────────────────────────────────────────────────────
+  - type: redis
+    name: gitinsight-redis
+    region: singapore
+    plan: free
+    maxmemoryPolicy: noeviction
