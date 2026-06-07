@@ -426,32 +426,6 @@ export function CareerReadinessPage() {
               )}
             </AnimatePresence>
           </div>
-
-          {/* AI Summary */}
-          {report.aiSummary && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              style={{
-                marginTop: 0,
-                border: 'var(--border-thin)',
-                borderTop: 'none',
-                padding: '28px 32px',
-              }}
-            >
-              <div className="uppercase-label" style={{ marginBottom: 16 }}>AI Assessment</div>
-              <p style={{
-                fontFamily: 'var(--font-serif-body)',
-                fontSize: '1rem',
-                lineHeight: 1.85,
-                color: 'var(--neutral-700)',
-                maxWidth: '80ch',
-              }}>
-                {report.aiSummary}
-              </p>
-            </motion.div>
-          )}
         </div>
       )}
 
