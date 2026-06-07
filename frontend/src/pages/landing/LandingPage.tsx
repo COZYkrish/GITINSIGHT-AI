@@ -78,7 +78,7 @@ const FEATURES = [
 ]
 
 /* ── Reveal Animation Hook ────────────────────────── */
-function RevealBlock({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
+function RevealBlock({ children, delay = 0, className, style }: { children: React.ReactNode, delay?: number, className?: string, style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   return (
@@ -87,6 +87,8 @@ function RevealBlock({ children, delay = 0 }: { children: React.ReactNode, delay
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+      style={style}
     >
       {children}
     </motion.div>
@@ -445,11 +447,12 @@ export function LandingPage() {
               { label: '02', headline: 'Recruiters only see repositories.', sub: 'No context. No story. Just file counts and star ratings.' },
               { label: '03', headline: 'GitInsight reveals the complete picture.', sub: 'Turn your GitHub into career-defining intelligence.' },
             ].map((scene, i) => (
-              <RevealBlock key={i} delay={i * 0.15}>
+              <RevealBlock key={i} delay={i * 0.15} style={{ height: '100%' }}>
                 <div style={{
                   padding: '40px 32px',
                   borderRight: 'var(--border-thin)',
                   borderBottom: 'var(--border-thin)',
+                  height: '100%',
                 }}>
                   <div style={{
                     fontFamily: 'var(--font-mono)',
