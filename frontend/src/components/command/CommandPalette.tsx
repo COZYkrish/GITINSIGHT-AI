@@ -84,25 +84,28 @@ export function CommandPalette() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(2px)', zIndex: 100 }}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            initial={{ opacity: 0, scale: 0.98, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            exit={{ opacity: 0, scale: 0.98, y: -10 }}
             transition={{ duration: 0.15 }}
             style={{
               position: 'fixed', top: '15vh', left: '50%', transform: 'translateX(-50%)',
-              width: '100%', maxWidth: 600,
-              background: 'rgba(8,8,8,0.98)', backdropFilter: 'blur(50px)',
-              border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-xl)',
-              zIndex: 101, overflow: 'hidden', boxShadow: 'var(--shadow-elevated)',
+              width: '100%', maxWidth: 640,
+              background: 'var(--paper)',
+              border: 'var(--border-thick)',
+              boxShadow: 'var(--shadow-hard)',
+              zIndex: 101, overflow: 'hidden',
             }}
           >
-            {/* Input */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px',
-              borderBottom: '1px solid var(--glass-border)' }}>
-              <Search size={18} color="var(--text-muted)" />
+            {/* Input Header */}
+            <div style={{ 
+              display: 'flex', alignItems: 'center', gap: 12, padding: '20px 24px',
+              borderBottom: 'var(--border-thick)', background: 'var(--neutral-100)' 
+            }}>
+              <Search size={20} color="var(--ink)" />
               <input
                 ref={inputRef}
                 value={query}
@@ -111,21 +114,21 @@ export function CommandPalette() {
                 placeholder="Search pages, repositories, actions..."
                 style={{
                   flex: 1, background: 'none', border: 'none', outline: 'none',
-                  color: 'var(--text-primary)', fontSize: '0.95rem', fontFamily: 'var(--font-body)',
+                  color: 'var(--ink)', fontSize: '1.25rem', fontFamily: 'var(--font-serif-display)',
+                  fontStyle: 'italic',
                 }}
               />
               <button onClick={() => setOpen(false)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                <X size={16} />
+                style={{ background: 'none', border: 'none', color: 'var(--neutral-500)', cursor: 'pointer', padding: 4 }}>
+                <X size={20} />
               </button>
             </div>
 
-            {/* Results */}
-            <div style={{ maxHeight: '60vh', overflowY: 'auto', padding: '8px' }}>
+            {/* Results Body */}
+            <div style={{ maxHeight: '55vh', overflowY: 'auto', padding: '12px 0' }}>
               {Object.entries(grouped).map(([category, items]) => (
-                <div key={category}>
-                  <div style={{ padding: '8px 12px 4px', fontSize: '0.7rem', fontWeight: 600,
-                    letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+                <div key={category} style={{ marginBottom: 12 }}>
+                  <div className="uppercase-label" style={{ padding: '8px 24px 4px', color: 'var(--neutral-600)' }}>
                     {category}
                   </div>
                   {items.map(cmd => {
@@ -136,14 +139,20 @@ export function CommandPalette() {
                         onClick={() => { navigate(cmd.path); setOpen(false) }}
                         onMouseEnter={() => setSelected(idx)}
                         style={{
-                          display: 'flex', alignItems: 'center', gap: 12,
-                          padding: '10px 12px', borderRadius: 10, cursor: 'pointer',
-                          background: isSelected ? 'rgba(59,130,246,0.1)' : 'transparent',
-                          transition: 'background 0.1s ease',
+                          display: 'flex', alignItems: 'center', gap: 16,
+                          padding: '12px 24px', cursor: 'pointer',
+                          background: isSelected ? 'var(--ink)' : 'transparent',
+                          color: isSelected ? 'var(--paper)' : 'var(--ink)',
+                          borderLeft: isSelected ? '4px solid var(--accent-red)' : '4px solid transparent',
+                          transition: 'none',
                         }}
                       >
-                        <cmd.icon size={16} color={isSelected ? 'var(--accent-blue)' : 'var(--text-muted)'} />
-                        <span style={{ fontSize: '0.875rem', color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
+                        <cmd.icon size={18} color={isSelected ? 'var(--paper)' : 'var(--neutral-500)'} />
+                        <span style={{ 
+                          fontSize: '1rem', 
+                          fontFamily: 'var(--font-serif-body)',
+                          fontWeight: isSelected ? 600 : 400 
+                        }}>
                           {cmd.label}
                         </span>
                       </div>
@@ -152,17 +161,22 @@ export function CommandPalette() {
                 </div>
               ))}
               {flat.length === 0 && (
-                <div style={{ padding: '40px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                  No results for "{query}"
+                <div style={{ padding: '60px 20px', textAlign: 'center' }}>
+                  <div style={{ fontFamily: 'var(--font-serif-display)', fontStyle: 'italic', fontSize: '1.25rem', color: 'var(--neutral-600)' }}>
+                    No results for "{query}"
+                  </div>
                 </div>
               )}
             </div>
 
-            <div style={{ padding: '10px 20px', borderTop: '1px solid var(--glass-border)',
-              display: 'flex', gap: 16, fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-              <span>↑↓ navigate</span>
-              <span>↵ open</span>
-              <span>esc close</span>
+            {/* Footer */}
+            <div style={{ 
+              padding: '12px 24px', borderTop: 'var(--border-thin)', background: 'var(--neutral-100)',
+              display: 'flex', gap: 24, fontFamily: 'var(--font-mono)', fontSize: '0.65rem', textTransform: 'uppercase', color: 'var(--neutral-500)' 
+            }}>
+              <span>↑↓ Navigate</span>
+              <span>↵ Open</span>
+              <span>ESC Close</span>
             </div>
           </motion.div>
         </>
