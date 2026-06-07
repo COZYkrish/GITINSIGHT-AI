@@ -1,73 +1,194 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { GitBranch, Lock, Zap, ArrowRight } from 'lucide-react'
+import { GitBranch, Lock, ArrowRight, Shield } from 'lucide-react'
 import api from '../../services/api'
-import { useAuthStore } from '../../store/authStore'
 
 const permissions = [
-  { icon: '👤', label: 'Read your public profile' },
-  { icon: '📁', label: 'Read your repositories' },
-  { icon: '🔒', label: 'Read-only — we never write or delete' },
-  { icon: '🛡️', label: 'Your token is encrypted at rest' },
+  { num: '01', label: 'Read your public profile', icon: GitBranch },
+  { num: '02', label: 'Read your repositories (names, metadata, languages)', icon: GitBranch },
+  { num: '03', label: 'Read-only access — we never write or delete', icon: Lock },
+  { num: '04', label: 'Your token is encrypted at rest (AES-256)', icon: Shield },
 ]
 
 export function ConnectGitHubPage() {
   const [isRedirecting, setIsRedirecting] = useState(false)
-  const { user } = useAuthStore()
 
   const connect = async () => {
     setIsRedirecting(true)
     try {
       const { data } = await api.get('/api/auth/github')
       window.location.href = data.url
-    } catch (err) {
+    } catch {
       setIsRedirecting(false)
     }
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
-      <div style={{ position: 'absolute', top: '30%', right: '20%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-        style={{ textAlign: 'center', maxWidth: 480, padding: '0 40px' }}>
-        
-        {/* GitHub icon with pulse */}
-        <motion.div
-          animate={{ boxShadow: ['0 0 20px rgba(59,130,246,0.3)', '0 0 60px rgba(59,130,246,0.6)', '0 0 20px rgba(59,130,246,0.3)'] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{ width: 80, height: 80, borderRadius: '50%', background: 'var(--glass-bg)', border: '2px solid var(--accent-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
-          <GitBranch size={36} color="var(--accent-blue)" />
-        </motion.div>
-
-        <div className="section-label" style={{ marginBottom: 12 }}>Step 2 of 3</div>
-        <h1 style={{ marginBottom: 16 }}>Connect GitHub</h1>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: 40, lineHeight: 1.7 }}>
-          Authorize GitInsight AI to read your GitHub profile and repositories. We need this to generate your AI intelligence reports.
-        </p>
-
-        {/* Permission list */}
-        <div className="glass-card" style={{ textAlign: 'left', marginBottom: 32, padding: '20px 24px' }}>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 12, fontWeight: 600 }}>
-            We'll request access to:
-          </div>
-          {permissions.map((p) => (
-            <div key={p.label} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--glass-border)' }}>
-              <span style={{ fontSize: '1.1rem' }}>{p.icon}</span>
-              <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>{p.label}</span>
-            </div>
-          ))}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 12, color: 'var(--text-muted)', fontSize: '0.78rem' }}>
-            <Lock size={12} /> OAuth 2.0 · Industry standard security
-          </div>
+    <div style={{
+      minHeight: '100vh',
+      background: 'var(--paper)',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+    }}>
+      {/* ── LEFT — Inverted art panel ──────────────────── */}
+      <div style={{
+        background: 'var(--ink)',
+        padding: '80px 60px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        borderRight: 'var(--border-thick)',
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+      }}>
+        <div style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6rem',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          color: 'rgba(255,255,255,0.3)',
+        }}>
+          02 / 03 — Connect GitHub
         </div>
 
-        <button className="btn-primary" onClick={connect} disabled={isRedirecting}
-          style={{ width: '100%', justifyContent: 'center', fontSize: '1rem', padding: '16px' }}>
-          <GitBranch size={20} />
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h1 style={{
+            fontFamily: 'var(--font-serif-display)',
+            fontWeight: 900,
+            fontSize: 'clamp(3.5rem, 6vw, 6rem)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.04em',
+            color: 'var(--paper)',
+            marginBottom: 32,
+          }}>
+            CONNECT<br />
+            <span style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.55)' }}>GITHUB.</span>
+          </h1>
+
+          <p style={{
+            fontFamily: 'var(--font-serif-body)',
+            fontSize: '1rem',
+            fontStyle: 'italic',
+            lineHeight: 1.75,
+            color: 'rgba(255,255,255,0.5)',
+            maxWidth: '30ch',
+          }}>
+            Authorize GitInsight AI to read your GitHub profile. We analyze, we report — 
+            we never write, never delete.
+          </p>
+        </motion.div>
+
+        <div style={{
+          borderTop: '1px solid rgba(255,255,255,0.15)',
+          paddingTop: 20,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+        }}>
+          <Lock size={12} color="rgba(255,255,255,0.3)" />
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.6rem',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.25)',
+          }}>
+            OAuth 2.0 · Industry standard security
+          </span>
+        </div>
+      </div>
+
+      {/* ── RIGHT — Permission list + CTA ──────────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        style={{
+          padding: '80px 60px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.6rem',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+          color: 'var(--neutral-500)',
+          marginBottom: 32,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+        }}>
+          <span>Access requested</span>
+          <div style={{ flex: 1, height: 1, background: 'var(--muted)' }} />
+        </div>
+
+        {/* Permission table */}
+        <div style={{ border: 'var(--border-thin)', marginBottom: 36 }}>
+          {permissions.map((p, i) => (
+            <div key={p.label} style={{
+              display: 'grid',
+              gridTemplateColumns: '48px 1fr',
+              borderBottom: i < permissions.length - 1 ? 'var(--border-thin)' : 'none',
+            }}>
+              <div style={{
+                borderRight: 'var(--border-thin)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.6rem',
+                letterSpacing: '0.1em',
+                color: 'var(--neutral-400)',
+              }}>
+                {p.num}
+              </div>
+              <div style={{
+                padding: '16px 20px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+                <p.icon size={14} strokeWidth={1.5} color="var(--neutral-500)" />
+                <span style={{
+                  fontFamily: 'var(--font-serif-body)',
+                  fontSize: '0.875rem',
+                  color: 'var(--neutral-700)',
+                }}>
+                  {p.label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          className="btn-primary"
+          onClick={connect}
+          disabled={isRedirecting}
+          style={{ justifyContent: 'center', padding: '18px 28px', fontSize: '0.8rem', marginBottom: 16, opacity: isRedirecting ? 0.7 : 1 }}
+        >
+          <GitBranch size={16} />
           {isRedirecting ? 'Redirecting to GitHub...' : 'Authorize with GitHub'}
-          <ArrowRight size={18} />
+          <ArrowRight size={16} />
         </button>
+
+        <p style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.65rem',
+          letterSpacing: '0.08em',
+          color: 'var(--neutral-400)',
+          textAlign: 'center',
+        }}>
+          You can revoke access at any time in GitHub Settings → Applications.
+        </p>
       </motion.div>
     </div>
   )

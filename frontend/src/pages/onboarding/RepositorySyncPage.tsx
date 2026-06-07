@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { CheckCircle, Loader2, Zap, GitBranch, Star, Code } from 'lucide-react'
+import { CheckCircle, Loader2, GitBranch } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useGitHubStore } from '../../store/githubStore'
 import api from '../../services/api'
 
 const steps = [
-  { id: 'connect', label: 'GitHub connected', icon: '🔗' },
-  { id: 'sync', label: 'Syncing repositories', icon: '📁' },
-  { id: 'analyze', label: 'Running AI analysis', icon: '🧠' },
-  { id: 'done', label: 'Reports ready!', icon: '✅' },
+  { id: 'connect', label: 'GitHub connected successfully' },
+  { id: 'sync',    label: 'Syncing repositories' },
+  { id: 'analyze', label: 'Running AI analysis' },
+  { id: 'done',    label: 'Intelligence reports ready' },
 ]
 
 export function RepositorySyncPage() {
@@ -31,23 +31,16 @@ export function RepositorySyncPage() {
 
     const runSync = async () => {
       try {
-        // Step 1: connected (already done by backend)
         setCurrentStep(1)
         await fetchMe()
-
-        // Step 2: sync
         await new Promise(r => setTimeout(r, 800))
         setCurrentStep(2)
         const syncRes = await api.post('/api/github/sync')
         setRepoCount(syncRes.data.repoCount)
         await Promise.all([fetchProfile(), fetchRepositories()])
-
-        // Step 3: initial analysis
         await new Promise(r => setTimeout(r, 600))
         setCurrentStep(3)
         await api.post('/api/analysis/developer-dna')
-
-        // Step 4: done
         await new Promise(r => setTimeout(r, 500))
         setCurrentStep(4)
         setTimeout(() => navigate('/dashboard'), 1500)
@@ -57,63 +50,139 @@ export function RepositorySyncPage() {
     }
 
     runSync()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 80% at 50% 50%, rgba(59,130,246,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+    <div style={{
+      minHeight: '100vh',
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      background: 'var(--paper)',
+    }}>
+      {/* Left — inverted progress panel */}
+      <div style={{
+        background: 'var(--ink)',
+        padding: '80px 60px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        borderRight: 'var(--border-thick)',
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)',
+        backgroundSize: '24px 24px',
+      }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>
+          03 / 03 — Sync in Progress
+        </div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center', maxWidth: 500, padding: '0 40px' }}>
-        {/* Animated logo */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3, repeat: currentStep < 4 ? Infinity : 0, ease: 'linear' }}
-          style={{ width: 80, height: 80, borderRadius: 24, background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
-          <Zap size={36} color="white" />
-        </motion.div>
+        <div>
+          {/* Spinning icon */}
+          <motion.div
+            animate={{ rotate: currentStep < 4 ? 360 : 0 }}
+            transition={{ duration: 3, repeat: currentStep < 4 ? Infinity : 0, ease: 'linear' }}
+            style={{
+              width: 64, height: 64,
+              border: '3px solid rgba(255,255,255,0.3)',
+              borderTopColor: 'var(--paper)',
+              borderRadius: 0,
+              marginBottom: 40,
+            }}
+          />
+          <h1 style={{
+            fontFamily: 'var(--font-serif-display)',
+            fontWeight: 900,
+            fontSize: 'clamp(3rem, 5vw, 5rem)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.04em',
+            color: 'var(--paper)',
+            marginBottom: 20,
+          }}>
+            {currentStep < 4 ? (<>SETTING<br /><span style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.5)' }}>UP.</span></>) : (<>YOU'RE<br /><span style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.5)' }}>READY.</span></>)}
+          </h1>
+          {repoCount > 0 && (
+            <p style={{ fontFamily: 'var(--font-serif-body)', fontSize: '0.95rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7 }}>
+              Found {repoCount} repositories — generating your AI intelligence reports.
+            </p>
+          )}
+        </div>
 
-        <div className="section-label" style={{ marginBottom: 12 }}>Step 3 of 3</div>
-        <h1 style={{ marginBottom: 8 }}>
-          {currentStep < 4 ? 'Setting up your intelligence...' : '🎉 You\'re ready!'}
-        </h1>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: 20 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.55rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)' }}>
+            This usually takes under 60 seconds
+          </span>
+        </div>
+      </div>
 
-        {repoCount > 0 && (
-          <p style={{ color: 'var(--text-secondary)', marginBottom: 32 }}>
-            Found {repoCount} repositories — generating your AI reports
-          </p>
-        )}
+      {/* Right — step list */}
+      <motion.div
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        style={{ padding: '80px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+      >
+        <div className="uppercase-label" style={{ marginBottom: 32, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span>Progress</span>
+          <div style={{ flex: 1, height: 1, background: 'var(--muted)' }} />
+        </div>
 
-        {/* Steps */}
-        <div style={{ textAlign: 'left', marginBottom: 40 }}>
+        <div style={{ border: 'var(--border-thin)' }}>
           {steps.map((step, i) => {
-            const isDone = currentStep > i
-            const isActive = currentStep === i
+            const isDone   = currentStep > i + 1
+            const isActive = currentStep === i + 1
             return (
-              <motion.div key={step.id}
-                initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.15 }}
-                style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', marginBottom: 8,
-                  borderRadius: 12, background: isActive ? 'rgba(59,130,246,0.08)' : isDone ? 'rgba(16,185,129,0.06)' : 'var(--glass-bg)',
-                  border: `1px solid ${isActive ? 'var(--accent-blue)' : isDone ? 'rgba(16,185,129,0.3)' : 'var(--glass-border)'}`,
-                  transition: 'all 0.3s ease' }}>
-                <div style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: isDone ? 'var(--accent-green-dim)' : isActive ? 'var(--accent-blue-dim)' : 'var(--glass-bg)' }}>
-                  {isDone ? <CheckCircle size={20} color="var(--accent-green)" />
-                    : isActive ? <Loader2 size={20} color="var(--accent-blue)" style={{ animation: 'spin-slow 1s linear infinite' }} />
-                    : <span style={{ fontSize: '1rem' }}>{step.icon}</span>}
+              <div key={step.id} style={{
+                display: 'grid',
+                gridTemplateColumns: '48px 1fr auto',
+                alignItems: 'center',
+                borderBottom: i < steps.length - 1 ? 'var(--border-thin)' : 'none',
+                background: isActive ? 'var(--ink)' : isDone ? 'var(--neutral-100)' : 'transparent',
+                transition: 'background 0.2s',
+              }}>
+                {/* Number col */}
+                <div style={{
+                  borderRight: 'var(--border-thin)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '16px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.1em',
+                  color: isActive ? 'var(--paper)' : isDone ? 'var(--neutral-400)' : 'var(--neutral-300)',
+                }}>
+                  0{i + 1}
                 </div>
-                <span style={{ fontSize: '0.9rem', fontWeight: isActive ? 600 : 400,
-                  color: isDone ? 'var(--accent-green)' : isActive ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                {/* Label */}
+                <div style={{
+                  padding: '16px 20px',
+                  fontFamily: 'var(--font-serif-body)',
+                  fontSize: '0.88rem',
+                  color: isActive ? 'var(--paper)' : isDone ? 'var(--neutral-600)' : 'var(--neutral-300)',
+                  fontWeight: isActive ? 600 : 400,
+                }}>
                   {step.label}
-                </span>
-              </motion.div>
+                </div>
+                {/* Icon */}
+                <div style={{ padding: '16px 20px' }}>
+                  {isDone && <CheckCircle size={16} strokeWidth={1.5} color="var(--neutral-500)" />}
+                  {isActive && <Loader2 size={16} strokeWidth={1.5} color="var(--paper)" style={{ animation: 'spin-slow 1s linear infinite' }} />}
+                </div>
+              </div>
             )
           })}
         </div>
 
         {error && (
-          <div style={{ padding: '12px 16px', borderRadius: 10, background: 'rgba(236,72,153,0.1)', border: '1px solid rgba(236,72,153,0.3)', color: 'var(--accent-pink)', fontSize: '0.875rem' }}>
-            {error} — <a href="/dashboard" style={{ color: 'var(--accent-blue)' }}>Go to dashboard</a>
+          <div style={{
+            marginTop: 24,
+            padding: '14px 16px',
+            border: '1px solid var(--red)',
+            background: 'rgba(204,0,0,0.04)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.78rem',
+            color: 'var(--red)',
+            letterSpacing: '0.06em',
+          }}>
+            {error} —{' '}
+            <a href="/dashboard" style={{ color: 'var(--ink)', textDecoration: 'underline' }}>Go to dashboard</a>
           </div>
         )}
       </motion.div>
