@@ -6,7 +6,7 @@ import { useAuthStore } from '../../store/authStore'
 import { useGitHubStore } from '../../store/githubStore'
 import { GlassCard, ScoreGauge, ProgressBar, GlowBadge } from '../../components/ui/GlassCard'
 import api from '../../services/api'
-import { DeveloperDNA, PortfolioScore, CareerReport } from '../../types'
+import type { DeveloperDNA, PortfolioScore, CareerReport } from '../../types'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
 
 export function DashboardPage() {

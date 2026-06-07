@@ -4,7 +4,7 @@ import { Sparkles, RefreshCw, Share2, Download, ArrowRight } from 'lucide-react'
 import { GlassCard, GlowBadge, ScoreGauge, ProgressBar } from '../../../components/ui/GlassCard'
 import { ScoreSphere } from '../../../components/three/ScoreSphere'
 import api from '../../../services/api'
-import { PortfolioScore } from '../../../types'
+import type { PortfolioScore } from '../../../types'
 
 export function PortfolioScorePage() {
   const [score, setScore] = useState<PortfolioScore | null>(null)

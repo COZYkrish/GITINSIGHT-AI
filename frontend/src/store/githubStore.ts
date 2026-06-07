@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { GitHubProfile, Repository } from '../types'
+import type { GitHubProfile, Repository } from '../types'
 import api from '../services/api'
 
 interface GitHubState {

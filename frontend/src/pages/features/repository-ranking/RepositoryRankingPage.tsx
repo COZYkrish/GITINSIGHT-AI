@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, Star, GitBranch, ExternalLink } from 'lucide-react'
 import { GlassCard, GlowBadge, ScoreGauge } from '../../../components/ui/GlassCard'
 import { useGitHubStore } from '../../../store/githubStore'
-import { Repository } from '../../../types'
+import type { Repository } from '../../../types'
 
 export function RepositoryRankingPage() {
   const { repositories, fetchRepositories } = useGitHubStore()

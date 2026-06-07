@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, Briefcase } from 'lucide-react'
 import { GlassCard, ScoreGauge, GlowBadge, ProgressBar } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { CareerReport, CareerRole } from '../../../types'
+import type { CareerReport, CareerRole } from '../../../types'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 
 const ROLE_COLORS = ['var(--accent-blue)', 'var(--accent-purple)', 'var(--accent-cyan)', 'var(--accent-green)']

@@ -1,5 +1,5 @@
-import { motion, HTMLMotionProps } from 'framer-motion'
-import { ReactNode } from 'react'
+import { motion, type HTMLMotionProps } from 'framer-motion'
+import type { ReactNode } from 'react'
 
 interface GlassCardProps extends HTMLMotionProps<'div'> {
   children: ReactNode
@@ -118,8 +118,8 @@ export function AnimatedCounter({ value, duration = 1.5, suffix = '', className 
 function Counter({ from, to, duration }: { from: number; to: number; duration: number }) {
   return (
     <motion.span
-      initial={from}
-      animate={to}
+      initial={from as any}
+      animate={to as any}
       transition={{ duration, ease: 'easeOut' }}
     >
       {to}

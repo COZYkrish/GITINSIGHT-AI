@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, Share2 } from 'lucide-react'
 import { GlassCard, GlowBadge, ProgressBar } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { DeveloperDNA } from '../../../types'
+import type { DeveloperDNA } from '../../../types'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, PolarRadiusAxis } from 'recharts'
 
 const ARCHETYPE_COLORS: Record<string, string> = {

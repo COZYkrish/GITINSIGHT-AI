@@ -30,7 +30,7 @@ export default defineConfig({
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
           'animation-vendor': ['framer-motion', 'gsap'],
           'chart-vendor': ['recharts'],
-        },
+        } as any,
       },
     },
   },

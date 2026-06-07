@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, GraduationCap, BookOpen, Zap } from 'lucide-react'
 import { GlassCard, GlowBadge, ProgressBar, ScoreGauge } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { MentorReport } from '../../../types'
+import type { MentorReport } from '../../../types'
 
 const LEVEL_COLORS: Record<string, string> = {
   'Junior Developer': 'var(--accent-cyan)',

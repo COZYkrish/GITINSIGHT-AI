@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, RefreshCw, Gift, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { GlassCard } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { WrappedReport } from '../../../types'
+import type { WrappedReport } from '../../../types'
 
 const SLIDE_THEMES = [
   { bg: 'linear-gradient(135deg, #1a0a3a, #0a1628)', accent: '#8b5cf6' },

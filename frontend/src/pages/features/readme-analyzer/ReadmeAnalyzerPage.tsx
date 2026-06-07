@@ -4,7 +4,7 @@ import { Sparkles, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react'
 import { GlassCard, ScoreGauge, GlowBadge, ProgressBar } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
 import { useGitHubStore } from '../../../store/githubStore'
-import { Repository } from '../../../types'
+import type { Repository } from '../../../types'
 
 interface ReadmeReport {
   score: number

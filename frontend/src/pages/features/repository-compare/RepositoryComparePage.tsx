@@ -4,7 +4,7 @@ import { Sparkles, RefreshCw, GitBranch, ArrowLeftRight, Trophy } from 'lucide-r
 import { GlassCard, GlowBadge, ScoreGauge, ProgressBar } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
 import { useGitHubStore } from '../../../store/githubStore'
-import { Repository } from '../../../types'
+import type { Repository } from '../../../types'
 
 interface CompareResult {
   winner: 'A' | 'B'

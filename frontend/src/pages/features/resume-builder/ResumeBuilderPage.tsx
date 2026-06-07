@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, RefreshCw, Download, FileText, Copy, Check } from 'lucide-react'
 import { GlassCard, ScoreGauge, GlowBadge } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { GeneratedResume } from '../../../types'
+import type { GeneratedResume } from '../../../types'
 
 const RESUME_TYPES = [
   { id: 'ats', label: 'ATS Optimized', icon: '🤖', desc: 'Beat applicant tracking systems', color: 'var(--accent-green)' },

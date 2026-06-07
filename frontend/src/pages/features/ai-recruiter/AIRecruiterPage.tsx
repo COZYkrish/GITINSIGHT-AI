@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, User, Building2, TrendingUp, TrendingDown } from 'lucide-react'
 import { GlassCard, ScoreGauge, GlowBadge, TypewriterText } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
-import { RecruiterReport } from '../../../types'
+import type { RecruiterReport } from '../../../types'
 
 const verdictColors: Record<string, string> = {
   'Strong Hire': 'var(--accent-green)',
