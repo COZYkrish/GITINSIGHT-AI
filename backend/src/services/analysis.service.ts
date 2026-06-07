@@ -546,3 +546,49 @@ export async function generatePortfolioContent(userId: string) {
 
   return data
 }
+
+// ──────────────────────────────────────────────
+// Readme Analysis
+// ──────────────────────────────────────────────
+const ReadmeSchema = z.object({
+  score: z.number(),
+  healthScore: z.number(),
+  missingSections: z.array(z.string()),
+  suggestions: z.array(z.string()),
+  enhancedReadme: z.string(),
+})
+
+const ReadmeFallback = {
+  score: 40, healthScore: 40,
+  missingSections: ['Installation', 'Usage', 'License'],
+  suggestions: ['Add a description', 'Add setup instructions'],
+  enhancedReadme: '# README\\n\\nAnalysis unavailable.',
+}
+
+export async function generateReadmeAnalysis(userId: string, repositoryId: string) {
+  const repos = await getRepositories(userId)
+  const repo = repos.find(r => r._id.toString() === repositoryId)
+  if (!repo) throw new Error('Repository not found')
+
+  const prompt = buildReadmePrompt({
+    repoName: repo.name,
+    language: repo.language || 'Unknown',
+    description: repo.description || '',
+    existingReadme: repo.readmeContent || '',
+    topics: repo.topics || [],
+    stars: repo.stars || 0,
+    homepage: repo.homepage || '',
+  })
+
+  const { data, tokens } = await geminiService.generateStructured(prompt, ReadmeSchema, ReadmeFallback)
+  await recordTokenUsage(userId, 'readme_analyzer', tokens)
+
+  const result = await ReadmeReport.findOneAndUpdate(
+    { userId, repositoryId },
+    { userId, repositoryId, ...data, generatedAt: new Date() },
+    { upsert: true, new: true }
+  )
+
+  return result
+}
+

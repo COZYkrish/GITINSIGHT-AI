@@ -9,6 +9,7 @@ import {
   generateMentorReport,
   generateLinkedInContent,
   generateResume,
+  generateReadmeAnalysis,
 } from '../services/analysis.service'
 import { DeveloperDNA } from '../models/DeveloperDNA'
 import { PortfolioScore } from '../models/PortfolioScore'
@@ -17,6 +18,7 @@ import { CareerReport } from '../models/CareerReport'
 import { WrappedReport } from '../models/WrappedReport'
 import { MentorReport } from '../models/MentorReport'
 import { GeneratedResume } from '../models/GeneratedResume'
+import { ReadmeReport } from '../models/ReadmeReport'
 import { User } from '../models/User'
 
 const router = Router()
@@ -102,6 +104,17 @@ router.post('/resume', async (req: AuthRequest, res: Response) => {
   }
 })
 
+router.post('/readme', async (req: AuthRequest, res: Response) => {
+  try {
+    const { repositoryId } = req.body
+    if (!repositoryId) { res.status(400).json({ error: 'repositoryId is required' }); return }
+    const result = await generateReadmeAnalysis(req.userId!, repositoryId)
+    res.json(result)
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : 'Analysis failed' })
+  }
+})
+
 // ── Report retrieval (GET = fetch saved) ──
 router.get('/developer-dna', async (req: AuthRequest, res: Response) => {
   const data = await DeveloperDNA.findOne({ userId: req.userId })
@@ -137,6 +150,11 @@ router.get('/mentor', async (req: AuthRequest, res: Response) => {
 router.get('/resume/:type', async (req: AuthRequest, res: Response) => {
   const type = String(req.params.type) as 'ats' | 'fullstack' | 'frontend' | 'ai'
   const data = await GeneratedResume.findOne({ userId: req.userId, type })
+  res.json(data || null)
+})
+
+router.get('/readme/:repositoryId', async (req: AuthRequest, res: Response) => {
+  const data = await ReadmeReport.findOne({ userId: req.userId, repositoryId: req.params.repositoryId })
   res.json(data || null)
 })
 
