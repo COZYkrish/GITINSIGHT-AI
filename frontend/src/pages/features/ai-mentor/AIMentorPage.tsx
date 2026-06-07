@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Sparkles, RefreshCw, GraduationCap, BookOpen, Zap } from 'lucide-react'
-import { GlassCard, GlowBadge, ProgressBar, ScoreGauge } from '../../../components/ui/GlassCard'
+import { Sparkles, RefreshCw, GraduationCap } from 'lucide-react'
+import { GlassCard, GlowBadge } from '../../../components/ui/GlassCard'
 import api from '../../../services/api'
 import type { MentorReport } from '../../../types'
 
@@ -14,13 +14,11 @@ const LEVEL_COLORS: Record<string, string> = {
 
 export function AIMentorPage() {
   const [report, setReport] = useState<MentorReport | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [tab, setTab] = useState<'feedback' | 'roadmap' | 'goals'>('feedback')
 
   useEffect(() => {
-    setIsLoading(true)
-    api.get('/api/analysis/mentor').then(r => setReport(r.data)).catch(() => {}).finally(() => setIsLoading(false))
+    api.get('/api/analysis/mentor').then(r => setReport(r.data)).catch(() => {})
   }, [])
 
   const generate = async () => {

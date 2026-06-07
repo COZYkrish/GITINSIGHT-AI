@@ -16,7 +16,7 @@ export async function recordTokenUsage(
     await AIUsage.create({
       userId,
       feature,
-      aiModel: 'gemini-3.5-flash',
+      aiModel: 'gemini-2.5-flash',
       promptTokens: usage.prompt,
       completionTokens: usage.completion,
       totalTokens: usage.total,

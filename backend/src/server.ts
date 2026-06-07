@@ -37,7 +37,7 @@ async function bootstrap() {
     console.log(`✅ Server running on http://localhost:${PORT}`)
     console.log(`🌐 Frontend: ${env.FRONTEND_URL}`)
     console.log(`📊 Environment: ${env.NODE_ENV}`)
-    console.log(`🤖 AI: Gemini 1.5 Pro`)
+    console.log(`🤖 AI: Gemini 2.5 Flash`)
     console.log(`⚡ Jobs: ${redisConnected ? 'BullMQ/Redis' : 'Synchronous fallback'}`)
   })
 }

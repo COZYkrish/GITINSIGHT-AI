@@ -36,10 +36,11 @@ export { NewsprintCard as GlassCard }
 interface EditorialBadgeProps {
   children: ReactNode
   variant?: 'default' | 'inverted' | 'red'
+  color?: string
   className?: string
 }
 
-export function EditorialBadge({ children, variant = 'default', className = '' }: EditorialBadgeProps) {
+export function EditorialBadge({ children, variant = 'default', color, className = '' }: EditorialBadgeProps) {
   const cls =
     variant === 'inverted' ? 'np-badge-inverted' :
     variant === 'red'      ? 'np-badge-red'      : 'np-badge'

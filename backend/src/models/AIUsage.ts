@@ -16,7 +16,7 @@ export interface IAIUsage {
 const AIUsageSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   feature: { type: String, required: true },
-  aiModel: { type: String, default: 'gemini-1.5-flash' },
+  aiModel: { type: String, default: 'gemini-2.5-flash' },
   promptTokens: { type: Number, default: 0 },
   completionTokens: { type: Number, default: 0 },
   totalTokens: { type: Number, default: 0 },

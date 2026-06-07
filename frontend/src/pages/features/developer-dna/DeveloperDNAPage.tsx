@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Sparkles, RefreshCw, Share2 } from 'lucide-react'
 import { GlassCard, GlowBadge, ProgressBar } from '../../../components/ui/GlassCard'
@@ -19,23 +19,14 @@ const ARCHETYPE_COLORS: Record<string, string> = {
   'The DevOps Engineer': '#84cc16',
 }
 
-const ARCHETYPE_DESCRIPTIONS: Record<string, string> = {
-  'The AI Builder': 'You\'re drawn to intelligence. Building systems that learn, adapt and reason is your domain.',
-  'The Product Engineer': 'You blur the line between engineer and designer. You build things people love.',
-  'The Full Stack Architect': 'You see the entire system. Frontend to backend to infrastructure — you own it all.',
-  'The Startup Hacker': 'Speed is your superpower. You ship fast, learn faster, and build to matter.',
-  'The Problem Solver': 'Complex systems don\'t scare you — they excite you. You engineer elegant solutions.',
-  'The Open Source Contributor': 'You build in public, share generously, and lift the entire community with you.',
-}
 
 export function DeveloperDNAPage() {
   const [dna, setDna] = useState<DeveloperDNA | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isGenerating, setIsGenerating] = useState(false)
   const [activeTab, setActiveTab] = useState<'overview' | 'traits' | 'roadmap'>('overview')
 
   useEffect(() => {
-    setIsLoading(true)
     api.get('/api/analysis/developer-dna').then(r => setDna(r.data)).catch(() => {}).finally(() => setIsLoading(false))
   }, [])
 

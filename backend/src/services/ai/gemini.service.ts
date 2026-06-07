@@ -14,7 +14,7 @@ class GeminiService {
 
   constructor() {
     this.client = new GoogleGenerativeAI(env.GEMINI_API_KEY)
-    this.model = this.client.getGenerativeModel({ model: 'gemini-3.5-flash' })
+    this.model = this.client.getGenerativeModel({ model: 'gemini-2.5-flash' })
   }
 
   async generateStructured<T>(
