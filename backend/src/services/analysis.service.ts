@@ -592,3 +592,70 @@ export async function generateReadmeAnalysis(userId: string, repositoryId: strin
   return result
 }
 
+// ──────────────────────────────────────────────
+// Repository Compare
+// ──────────────────────────────────────────────
+const RepoCompareSchema = z.object({
+  winner: z.enum(['A', 'B']),
+  repositoryA: z.object({
+    name: z.string(),
+    scores: z.record(z.string(), z.number()),
+    strengths: z.array(z.string()),
+    weaknesses: z.array(z.string())
+  }),
+  repositoryB: z.object({
+    name: z.string(),
+    scores: z.record(z.string(), z.number()),
+    strengths: z.array(z.string()),
+    weaknesses: z.array(z.string())
+  }),
+  complexityComparison: z.object({ a: z.number(), b: z.number(), verdict: z.string() }),
+  innovationComparison: z.object({ a: z.number(), b: z.number(), verdict: z.string() }),
+  documentationComparison: z.object({ a: z.number(), b: z.number(), verdict: z.string() }),
+  recruiterValue: z.object({ a: z.number(), b: z.number(), recommendation: z.string() }),
+  resumeValue: z.object({ a: z.string(), b: z.string() }),
+  technicalDepth: z.object({ a: z.number(), b: z.number(), verdict: z.string() }),
+  aiAnalysis: z.string(),
+})
+
+const RepoCompareFallback = {
+  winner: 'A' as const,
+  repositoryA: { name: 'Repo A', scores: { complexity: 50 }, strengths: ['Good'], weaknesses: ['Needs work'] },
+  repositoryB: { name: 'Repo B', scores: { complexity: 50 }, strengths: ['Good'], weaknesses: ['Needs work'] },
+  complexityComparison: { a: 50, b: 50, verdict: 'Tied' },
+  innovationComparison: { a: 50, b: 50, verdict: 'Tied' },
+  documentationComparison: { a: 50, b: 50, verdict: 'Tied' },
+  recruiterValue: { a: 50, b: 50, recommendation: 'Both are okay' },
+  resumeValue: { a: 'Good', b: 'Good' },
+  technicalDepth: { a: 50, b: 50, verdict: 'Tied' },
+  aiAnalysis: 'Comparison unavailable. Please try again.',
+}
+
+export async function generateRepositoryCompare(userId: string, repoAId: string, repoBId: string) {
+  const repos = await getRepositories(userId)
+  const repoA = repos.find(r => r._id.toString() === repoAId)
+  const repoB = repos.find(r => r._id.toString() === repoBId)
+  
+  if (!repoA || !repoB) throw new Error('One or both repositories not found')
+
+  const prompt = buildRepositoryComparePrompt({
+    repoA: {
+      name: repoA.name, language: repoA.language || 'Unknown', stars: repoA.stars,
+      description: repoA.description || '', topics: repoA.topics, hasReadme: repoA.hasReadme,
+      homepage: repoA.homepage || '', commitCount: repoA.commitCount,
+    },
+    repoB: {
+      name: repoB.name, language: repoB.language || 'Unknown', stars: repoB.stars,
+      description: repoB.description || '', topics: repoB.topics, hasReadme: repoB.hasReadme,
+      homepage: repoB.homepage || '', commitCount: repoB.commitCount,
+    }
+  })
+
+  const { data, tokens } = await geminiService.generateStructured(prompt, RepoCompareSchema, RepoCompareFallback)
+  await recordTokenUsage(userId, 'repository_compare', tokens)
+
+  // We don't save this to a database model, we just return it to the frontend directly
+  return data
+}
+
+

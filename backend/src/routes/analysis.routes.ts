@@ -10,6 +10,7 @@ import {
   generateLinkedInContent,
   generateResume,
   generateReadmeAnalysis,
+  generateRepositoryCompare,
 } from '../services/analysis.service'
 import { DeveloperDNA } from '../models/DeveloperDNA'
 import { PortfolioScore } from '../models/PortfolioScore'
@@ -109,6 +110,17 @@ router.post('/readme', async (req: AuthRequest, res: Response) => {
     const { repositoryId } = req.body
     if (!repositoryId) { res.status(400).json({ error: 'repositoryId is required' }); return }
     const result = await generateReadmeAnalysis(req.userId!, repositoryId)
+    res.json(result)
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : 'Analysis failed' })
+  }
+})
+
+router.post('/compare', async (req: AuthRequest, res: Response) => {
+  try {
+    const { repoAId, repoBId } = req.body
+    if (!repoAId || !repoBId) { res.status(400).json({ error: 'repoAId and repoBId are required' }); return }
+    const result = await generateRepositoryCompare(req.userId!, repoAId, repoBId)
     res.json(result)
   } catch (err: unknown) {
     res.status(500).json({ error: err instanceof Error ? err.message : 'Analysis failed' })
