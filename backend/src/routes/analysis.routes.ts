@@ -11,6 +11,8 @@ import {
   generateResume,
   generateReadmeAnalysis,
   generateRepositoryCompare,
+  generatePortfolioTimeline,
+  generatePortfolioContent,
 } from '../services/analysis.service'
 import { DeveloperDNA } from '../models/DeveloperDNA'
 import { PortfolioScore } from '../models/PortfolioScore'
@@ -20,6 +22,7 @@ import { WrappedReport } from '../models/WrappedReport'
 import { MentorReport } from '../models/MentorReport'
 import { GeneratedResume } from '../models/GeneratedResume'
 import { ReadmeReport } from '../models/ReadmeReport'
+import { PortfolioTimeline } from '../models/PortfolioTimeline'
 import { User } from '../models/User'
 
 const router = Router()
@@ -127,6 +130,24 @@ router.post('/compare', async (req: AuthRequest, res: Response) => {
   }
 })
 
+router.post('/timeline', async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await generatePortfolioTimeline(req.userId!)
+    res.json(result)
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : 'Timeline generation failed' })
+  }
+})
+
+router.post('/portfolio-generator', async (req: AuthRequest, res: Response) => {
+  try {
+    const result = await generatePortfolioContent(req.userId!)
+    res.json(result)
+  } catch (err: unknown) {
+    res.status(500).json({ error: err instanceof Error ? err.message : 'Portfolio generation failed' })
+  }
+})
+
 // ── Report retrieval (GET = fetch saved) ──
 router.get('/developer-dna', async (req: AuthRequest, res: Response) => {
   const data = await DeveloperDNA.findOne({ userId: req.userId })
@@ -167,6 +188,11 @@ router.get('/resume/:type', async (req: AuthRequest, res: Response) => {
 
 router.get('/readme/:repositoryId', async (req: AuthRequest, res: Response) => {
   const data = await ReadmeReport.findOne({ userId: req.userId, repositoryId: req.params.repositoryId })
+  res.json(data || null)
+})
+
+router.get('/timeline', async (req: AuthRequest, res: Response) => {
+  const data = await PortfolioTimeline.findOne({ userId: req.userId })
   res.json(data || null)
 })
 
