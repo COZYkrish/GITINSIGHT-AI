@@ -1,4 +1,4 @@
-<![CDATA[<div align="center">
+<div align="center">
 
 <!-- Hero Banner -->
 <img src="docs/screenshots/features_section.png" alt="GitInsight AI — Landing Page" width="100%" />
@@ -6,26 +6,34 @@
 <br />
 <br />
 
-# 🧬 GitInsight AI
+<h1>🧬 GitInsight AI</h1>
 
-### *Transform Your GitHub Into Career Intelligence*
+<h3><em>Transform Your GitHub Into Career Intelligence</em></h3>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-8.x-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Gemini AI](https://img.shields.io/badge/Google_Gemini-AI-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
-[![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)](https://redis.io/)
-[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
-
-<br />
-
-**GitInsight AI** is an AI-powered developer intelligence platform that analyzes your GitHub profile, repositories, commit history, and coding patterns to generate **career-defining insights** — including your unique Developer DNA™, portfolio scores, AI recruiter simulations, career readiness reports, auto-generated resumes, and much more.
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" alt="TypeScript" /></a>
+<a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React" /></a>
+<a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white" alt="Node.js" /></a>
+<a href="https://www.mongodb.com/"><img src="https://img.shields.io/badge/MongoDB-8.x-47A248?logo=mongodb&logoColor=white" alt="MongoDB" /></a>
+<a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?logo=google&logoColor=white" alt="Gemini AI" /></a>
+<a href="https://redis.io/"><img src="https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white" alt="Redis" /></a>
+<a href="https://docs.docker.com/compose/"><img src="https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white" alt="Docker" /></a>
 
 <br />
 
-[**Get Started**](#-quick-start) · [**Features**](#-features) · [**Architecture**](#%EF%B8%8F-system-architecture) · [**API Reference**](#-api-reference) · [**Day-to-Day Uses**](#-real-world-day-to-day-use-cases) · [**Contributing**](#-contributing) · [**License**](#-license)
+<p><strong>GitInsight AI</strong> is an AI-powered developer intelligence platform that analyzes your GitHub profile, repositories, commit history, and coding patterns to generate <strong>career-defining insights</strong> — including your unique Developer DNA™, portfolio scores, AI recruiter simulations, career readiness reports, auto-generated resumes, and much more.</p>
+
+<br />
+
+<p>
+<a href="#-quick-start"><strong>Get Started</strong></a> · 
+<a href="#-features"><strong>Features</strong></a> · 
+<a href="#%EF%B8%8F-system-architecture"><strong>Architecture</strong></a> · 
+<a href="#-api-reference"><strong>API Reference</strong></a> · 
+<a href="#-real-world-day-to-day-use-cases"><strong>Day-to-Day Uses</strong></a> · 
+<a href="#-contributing"><strong>Contributing</strong></a> · 
+<a href="#-license"><strong>License</strong></a>
+</p>
 
 </div>
 
@@ -991,4 +999,3 @@ SOFTWARE.
 [![Follow](https://img.shields.io/github/followers/COZYkrish?style=social)](https://github.com/COZYkrish)
 
 </div>
-]]>
