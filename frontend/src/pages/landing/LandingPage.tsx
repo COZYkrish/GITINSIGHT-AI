@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ArrowRight, GitBranch, ChevronDown } from 'lucide-react'
+import { ArrowRight, GitBranch } from 'lucide-react'
+import { HeroSection } from '../../components/layout/HeroSection'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -114,11 +115,6 @@ function MarqueeTicker() {
 
 /* ── Main Component ───────────────────────────────── */
 export function LandingPage() {
-  const heroRef = useRef<HTMLDivElement>(null)
-  const { scrollY } = useScroll()
-  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0])
-  const heroY = useTransform(scrollY, [0, 600], [0, -80])
-
   // Current date for edition metadata
   const editionDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
@@ -229,119 +225,8 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* ── HERO HEADLINE ──────────────────────────────── */}
-      <motion.section
-        ref={heroRef}
-        style={{
-          opacity: heroOpacity,
-          y: heroY,
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingTop: 120,
-          paddingBottom: 60,
-          paddingLeft: 40,
-          paddingRight: 40,
-          borderBottom: 'var(--border-thick)',
-          position: 'relative',
-        }}
-      >
-        {/* Vol label */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          style={{ marginBottom: 24 }}
-        >
-          <span className="np-badge-red" style={{ marginRight: 12 }}>Breaking</span>
-          <span className="edition-meta">AI-Powered Developer Intelligence Platform</span>
-        </motion.div>
-
-        {/* Massive headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          style={{
-            fontFamily: 'var(--font-serif-display)',
-            fontSize: 'clamp(4rem, 10vw, 9rem)',
-            fontWeight: 900,
-            lineHeight: 0.92,
-            letterSpacing: '-0.04em',
-            color: 'var(--ink)',
-            maxWidth: '14ch',
-            marginBottom: 40,
-          }}
-        >
-          Transform<br />
-          Your GitHub<br />
-          <span style={{ fontStyle: 'italic' }}>Into Career</span><br />
-          Intelligence.
-        </motion.h1>
-
-        {/* Deck text + CTA — two column */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, maxWidth: 900 }}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-          >
-            <p style={{
-              fontFamily: 'var(--font-serif-body)',
-              fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
-              lineHeight: 1.75,
-              color: 'var(--neutral-600)',
-              borderLeft: '4px solid var(--ink)',
-              paddingLeft: 20,
-            }}>
-              AI-powered portfolio analysis, recruiter insights, career readiness scores, 
-              and developer growth intelligence. Built for developers who take their career seriously.
-            </p>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <Link to="/register" className="btn-primary" style={{ fontSize: '0.78rem', padding: '16px 28px', justifyContent: 'center' }}>
-                <GitBranch size={15} />
-                Analyze My GitHub — Free
-                <ArrowRight size={15} />
-              </Link>
-              <Link to="/login" className="btn-secondary" style={{ fontSize: '0.78rem', padding: '14px 28px', justifyContent: 'center' }}>
-                Sign In to Dashboard
-              </Link>
-            </div>
-            <div style={{ marginTop: 24 }}>
-              {['No credit card', 'Free to start', 'GitHub OAuth', 'Private repos optional'].map(item => (
-                <span key={item} style={{
-                  display: 'inline-block',
-                  marginRight: 16,
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.65rem',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                  color: 'var(--neutral-500)',
-                }}>
-                  ✓ {item}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          style={{ position: 'absolute', bottom: 32, left: '50%', x: '-50%' }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <ChevronDown size={24} color="var(--neutral-400)" />
-        </motion.div>
-      </motion.section>
+      {/* ── HERO SECTION — Immersive video background ── */}
+      <HeroSection />
 
       {/* ── MARQUEE TICKER ─────────────────────────────── */}
       <MarqueeTicker />
