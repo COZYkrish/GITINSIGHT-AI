@@ -117,7 +117,7 @@ export function RegisterPage() {
         <form onSubmit={handleSubmit}>
           {/* Name + Email */}
           {[
-            { key: 'name', label: 'Full Name', placeholder: 'John Doe', icon: User, type: 'text' },
+            { key: 'name', label: 'Full Name', placeholder: 'krish sharma', icon: User, type: 'text' },
             { key: 'email', label: 'Email Address', placeholder: 'you@example.com', icon: Mail, type: 'email' },
           ].map(({ key, label, placeholder, icon: Icon, type }) => (
             <div key={key} style={{ marginBottom: 24 }}>

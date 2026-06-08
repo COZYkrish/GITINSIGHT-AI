@@ -4,45 +4,17 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, GitBranch, ChevronDown } from 'lucide-react'
 
 /* ─────────────────────────────────────────────────────────
-   Video
+   Config — exact values from the Mainframe reference prompt
 ───────────────────────────────────────────────────────── */
 const VIDEO_SRC =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4'
 
-/*
-  SENSITIVITY — how many seconds of video one full viewport-width
-  mouse swipe covers.  Higher = snappier / more reactive.
-*/
+/** Fraction multiplier per pixel: higher = snappier scrub */
 const SENSITIVITY = 0.8
 
-/*
-  LERP_FACTOR — how fast smoothedTime chases targetTime per rAF frame.
-  Range 0–1.  0.12 = silky smooth with ~60 ms of perceived lag.
-  0.25 = tighter / snappier.  Tune here for "feel".
-*/
-const LERP_FACTOR = 0.12
-
-/*
-  MIN_SEEK_DELTA — only issue a new seek when smoothedTime has moved
-  at least this many seconds away from the last seeked position.
-  Prevents micro-seeks that stall the decoder.
-*/
-const MIN_SEEK_DELTA = 0.025
-
 /* ─────────────────────────────────────────────────────────
-   Util: fastSeek shim
-   fastSeek() jumps to nearest I-frame — much faster than
-   precise currentTime on H.264.  Falls back to currentTime.
-───────────────────────────────────────────────────────── */
-function fastSeek(video: HTMLVideoElement, t: number) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const v = video as any
-  if (typeof v.fastSeek === 'function') v.fastSeek(t)
-  else video.currentTime = t
-}
-
-/* ─────────────────────────────────────────────────────────
-   HeroSection
+   HeroSection — full-screen immersive, mouse-scrub video
+   Mouse logic: window-level listener (Mainframe pattern)
 ───────────────────────────────────────────────────────── */
 export function HeroSection() {
   /* ── Scroll parallax ────────────────────────────────── */
@@ -51,69 +23,38 @@ export function HeroSection() {
   const heroY       = useTransform(scrollY, [0, 600], [0, -80])
 
   /* ── Scrub state — all refs, zero re-renders ────────── */
-  const videoRef       = useRef<HTMLVideoElement>(null)
-  const prevXRef       = useRef<number | null>(null)
+  const videoRef    = useRef<HTMLVideoElement>(null)
+  const prevXRef    = useRef<number | null>(null)
+  const targetTime  = useRef<number>(0)
+  const isSeeking   = useRef(false)
 
+  /* ── Seek chain (Mainframe pattern) ─────────────────── */
   /*
-    Two-tier time system for premium smooth feel:
-
-    targetTime   — where the cursor says the video SHOULD be right now.
-                   Updated instantly on every mousemove.  Raw, jittery.
-
-    smoothedTime — lerped value that eases toward targetTime each rAF frame.
-                   What the video decoder actually receives.
-                   The lerp eliminates the micro-jitter from raw cursor input,
-                   creating the "magnetic ease-in" feel of premium product pages.
+    onSeeked fires when the browser finishes decoding a frame.
+    If targetTime has moved since we last seeked, issue another seek.
+    This creates a tight chase loop with zero seek-flooding:
+    one seek completes → immediately check if more movement queued → seek again.
   */
-  const targetTime     = useRef<number>(0)
-  const smoothedTime   = useRef<number>(0)
-  const isSeeking      = useRef(false)
-  const lastSeekedTime = useRef<number>(-1)
-  const rafRef         = useRef<number>(0)
-
-  /* ── Seek chain ─────────────────────────────────────── */
   const onSeeked = useCallback(() => {
+    const video = videoRef.current
+    if (!video) return
+
     isSeeking.current = false
-    // rAF loop will pick up the next seek on the very next tick
-  }, [])
 
-  /* ── rAF lerp + seek loop ───────────────────────────── */
-  /*
-    Runs at 60 fps.
-    Each frame: advance smoothedTime toward targetTime by LERP_FACTOR.
-    If smoothedTime has moved enough AND the decoder is free, issue a seek.
-    Result: the video "eases" toward the cursor rather than snapping,
-            and the decoder is never interrupted mid-frame.
-  */
-  const startLoop = useCallback(() => {
-    const tick = () => {
-      const video = videoRef.current
-
-      if (video && video.duration > 0) {
-        // Exponential ease: smoothedTime converges on targetTime
-        smoothedTime.current +=
-          (targetTime.current - smoothedTime.current) * LERP_FACTOR
-
-        const delta = Math.abs(smoothedTime.current - lastSeekedTime.current)
-
-        if (!isSeeking.current && delta > MIN_SEEK_DELTA) {
-          isSeeking.current    = true
-          lastSeekedTime.current = smoothedTime.current
-          fastSeek(video, smoothedTime.current)
-        }
-      }
-
-      rafRef.current = requestAnimationFrame(tick)
+    if (Math.abs(video.currentTime - targetTime.current) > 0.001) {
+      isSeeking.current  = true
+      video.currentTime  = targetTime.current
     }
-
-    rafRef.current = requestAnimationFrame(tick)
   }, [])
 
-  /* ── Window-level mousemove ─────────────────────────── */
+  /* ── Window-level mousemove (Mainframe pattern) ─────── */
   /*
-    window listener = raw OS pointer events, zero React batching overhead.
-    Updates ONLY targetTime — no DOM access, no seek call here.
-    The rAF loop reads targetTime and applies it smoothly.
+    window listener captures every OS pointer event directly.
+    React's onMouseMove goes through synthetic event batching
+    and can be throttled — a window listener never misses a tick.
+
+    Formula (exact from Mainframe prompt):
+      offset = (delta / window.innerWidth) * SENSITIVITY * video.duration
   */
   const onMouseMove = useCallback((e: MouseEvent) => {
     const video = videoRef.current
@@ -131,10 +72,17 @@ export function HeroSection() {
 
     const offset = (delta / window.innerWidth) * SENSITIVITY * video.duration
 
+    // Clamp between 0 and duration
     targetTime.current = Math.min(
       Math.max(targetTime.current + offset, 0),
       video.duration,
     )
+
+    // Kick off seek only if decoder is idle right now
+    if (!isSeeking.current) {
+      isSeeking.current = true
+      video.currentTime = targetTime.current
+    }
   }, [])
 
   /* ── Mount / unmount ────────────────────────────────── */
@@ -142,26 +90,25 @@ export function HeroSection() {
     const video = videoRef.current
     if (!video) return
 
-    video.load() // eagerly fetch metadata
-    video.addEventListener('seeked', onSeeked)
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
+    // Eagerly fetch metadata so duration is ready before first mousemove
+    video.load()
 
-    startLoop()
+    video.addEventListener('seeked', onSeeked)
+    window.addEventListener('mousemove', onMouseMove)
 
     return () => {
-      cancelAnimationFrame(rafRef.current)
       video.removeEventListener('seeked', onSeeked)
       window.removeEventListener('mousemove', onMouseMove)
     }
-  }, [onSeeked, onMouseMove, startLoop])
+  }, [onSeeked, onMouseMove])
 
-  /* ── Render ─────────────────────────────────────────── */
+  /* ── Render — GitInsight AI theme unchanged ─────────── */
   return (
     <motion.section
       style={{ opacity: heroOpacity, y: heroY }}
       className="hero-section"
     >
-      {/* Background Video */}
+      {/* ── Background Video ─────────────────────────── */}
       <video
         ref={videoRef}
         src={VIDEO_SRC}
@@ -174,7 +121,7 @@ export function HeroSection() {
       {/* Gradient overlay */}
       <div className="hero-overlay" />
 
-      {/* Content */}
+      {/* ── Content ──────────────────────────────────── */}
       <div className="hero-content">
         <div className="hero-left">
 

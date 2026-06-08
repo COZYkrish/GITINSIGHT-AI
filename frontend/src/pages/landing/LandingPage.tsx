@@ -343,7 +343,7 @@ export function LandingPage() {
                     fontFamily: 'var(--font-mono)',
                     fontSize: '2.5rem',
                     fontWeight: 700,
-                    color: 'var(--muted)',
+                    color: 'var(--neutral-400)',
                     lineHeight: 1,
                     marginBottom: 20,
                     borderBottom: 'var(--border-thin)',
