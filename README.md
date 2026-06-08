@@ -265,12 +265,12 @@ Auto-generate professional portfolio website content including:
 
 <div align="center">
 
-### Landing Page — Newspaper-Inspired Design
+<h3>Landing Page — Newspaper-Inspired Design</h3>
 <img src="docs/screenshots/features_section.png" alt="GitInsight AI Landing Page" width="90%" />
 
 <br /><br />
 
-### Dashboard — Command Center
+<h3>Dashboard — Command Center</h3>
 <img src="docs/screenshots/login_page.png" alt="GitInsight AI Dashboard" width="90%" />
 
 </div>
@@ -985,17 +985,17 @@ SOFTWARE.
 
 <div align="center">
 
-### Built with ❤️ by [COZYkrish](https://github.com/COZYkrish)
+<h3>Built with ❤️ by <a href="https://github.com/COZYkrish">COZYkrish</a></h3>
 
-**GitInsight AI** — *The career intelligence platform for developers who take their work seriously.*
-
-<br />
-
-*Established 2026 · Vol. 1 · Developer Intelligence Platform*
+<p><strong>GitInsight AI</strong> — <em>The career intelligence platform for developers who take their work seriously.</em></p>
 
 <br />
 
-[![GitHub Stars](https://img.shields.io/github/stars/COZYkrish/GITINSIGHT-AI?style=social)](https://github.com/COZYkrish/GITINSIGHT-AI)
-[![Follow](https://img.shields.io/github/followers/COZYkrish?style=social)](https://github.com/COZYkrish)
+<p><em>Established 2026 · Vol. 1 · Developer Intelligence Platform</em></p>
+
+<br />
+
+<a href="https://github.com/COZYkrish/GITINSIGHT-AI"><img src="https://img.shields.io/github/stars/COZYkrish/GITINSIGHT-AI?style=social" alt="GitHub Stars" /></a>
+<a href="https://github.com/COZYkrish"><img src="https://img.shields.io/github/followers/COZYkrish?style=social" alt="Follow" /></a>
 
 </div>
