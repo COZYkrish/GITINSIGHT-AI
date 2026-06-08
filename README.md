@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- Hero Banner -->
-<img src="docs/screenshots/features_section.png" alt="GitInsight AI — Landing Page" width="100%" />
+<img src="docs/screenshots/hero_landing.png" alt="GitInsight AI — Landing Page" width="100%" />
 
 <br />
 <br />
