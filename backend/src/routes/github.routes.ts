@@ -23,19 +23,19 @@ router.get('/repositories', async (req: AuthRequest, res: Response) => {
 })
 
 router.post('/sync', async (req: AuthRequest, res: Response) => {
-  try {
-    const user = await User.findById(req.userId)
-    if (!user?.githubAccessToken) { res.status(400).json({ error: 'GitHub not connected' }); return }
-    
-    const result = await fetchAndStoreGitHubData(req.userId!, user.githubAccessToken)
-    await createNotification(req.userId!, 'sync_complete', '✅ GitHub Synced',
-      `Discovered ${result.repoCount} repositories`)
-    
-    res.json({ success: true, repoCount: result.repoCount })
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : 'Sync failed'
-    res.status(500).json({ error: msg })
-  }
+  // try {
+  //   const user = await User.findById(req.userId)
+  //   if (!user?.githubAccessToken) { res.status(400).json({ error: 'GitHub not connected' }); return }
+
+  //   const result = await fetchAndStoreGitHubData(req.userId!, user.githubAccessToken)
+  //   await createNotification(req.userId!, 'sync_complete', '✅ GitHub Synced',
+  //     `Discovered ${result.repoCount} repositories`)
+
+  res.json({ success: true, repoCount: result.repoCount })
+} catch (err: unknown) {
+  const msg = err instanceof Error ? err.message : 'Sync failed'
+  res.status(500).json({ error: msg })
+}
 })
 
 router.get('/cache-status', async (req: AuthRequest, res: Response) => {
