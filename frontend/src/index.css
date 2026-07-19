@@ -630,6 +630,19 @@ canvas { display: block; }
 
   .main-content { margin-left: 0; }
   .page-container { padding: 16px; }
+
+  /* Responsive grid for auth/onboarding pages */
+  .auth-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .auth-grid > div:first-child {
+    display: none !important; /* Hide the art panel on mobile */
+  }
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 /* ── DNA Archetype — mapped to Newsprint ─────────────── */

@@ -24,11 +24,9 @@ export function ConnectGitHubPage() {
   }
 
   return (
-    <div style={{
+    <div className="auth-grid" style={{
       minHeight: '100vh',
       background: 'var(--paper)',
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
     }}>
       {/* ── LEFT — Inverted art panel ──────────────────── */}
       <div style={{

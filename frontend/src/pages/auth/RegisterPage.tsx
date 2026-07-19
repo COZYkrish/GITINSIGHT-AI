@@ -31,10 +31,8 @@ export function RegisterPage() {
   }
 
   return (
-    <div style={{
+    <div className="auth-grid" style={{
       minHeight: '100vh',
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
       background: 'var(--paper)',
     }}>
       {/* ── RIGHT (first in DOM) — Form ─────────────────── */}

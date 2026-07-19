@@ -31,10 +31,8 @@ export function LoginPage() {
   }
 
   return (
-    <div style={{
+    <div className="auth-grid" style={{
       minHeight: '100vh',
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr',
       background: 'var(--paper)',
     }}>
       {/* ── LEFT PANEL — Editorial Art ─────────────────── */}
