@@ -31,25 +31,25 @@ router.post('/sync', async (req: AuthRequest, res: Response) => {
     await createNotification(req.userId!, 'sync_complete', '✅ GitHub Synced',
       `Discovered ${result.repoCount} repositories`)
 
-    res.json({ success: true, repoCount: result.repoCount })
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : 'Sync failed'
-    res.status(500).json({ error: msg })
-  }
-})
+    //     res.json({ success: true, repoCount: result.repoCount })
+    //   } catch (err: unknown) {
+    //     const msg = err instanceof Error ? err.message : 'Sync failed'
+    //     res.status(500).json({ error: msg })
+    //   }
+    // })
 
-router.get('/cache-status', async (req: AuthRequest, res: Response) => {
-  try {
-    const profile = await getGitHubProfile(req.userId!)
-    const valid = await isCacheValid(req.userId!)
-    res.json({
-      lastSyncedAt: profile?.lastSyncedAt,
-      isValid: valid,
-      ageHours: profile?.lastSyncedAt
-        ? Math.round((Date.now() - profile.lastSyncedAt.getTime()) / (1000 * 60 * 60) * 10) / 10
-        : null,
+    router.get('/cache-status', async (req: AuthRequest, res: Response) => {
+      try {
+        const profile = await getGitHubProfile(req.userId!)
+        const valid = await isCacheValid(req.userId!)
+        res.json({
+          lastSyncedAt: profile?.lastSyncedAt,
+          isValid: valid,
+          ageHours: profile?.lastSyncedAt
+            ? Math.round((Date.now() - profile.lastSyncedAt.getTime()) / (1000 * 60 * 60) * 10) / 10
+            : null,
+        })
+      } catch { res.status(500).json({ error: 'Failed to check cache' }) }
     })
-  } catch { res.status(500).json({ error: 'Failed to check cache' }) }
-})
 
-export default router
+    export default router
