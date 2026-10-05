@@ -9,3 +9,5 @@ Welcome to the central documentation index for GitInsight AI.
 - **AI & Prompts**: [Gemini Integration](file:///docs/ai/gemini-service-architecture.md) | [Prompt Specs](file:///docs/prompts/README.md)
 - **Deployment**: [Docker Guide](file:///docs/deployment/docker-guide.md) | [Render Guide](file:///docs/deployment/render-deployment.md)
 - **Testing & Security**: [QA Checklist](file:///docs/testing/manual-qa-checklist.md) | [Security Hardening](file:///docs/security/owasp-hardening.md)
+
+<!-- cache-refresh: 2026-10-05 18:54:18 +0530 -->
